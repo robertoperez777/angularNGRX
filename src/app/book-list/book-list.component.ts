@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import {Observable} from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Book } from '../models/book';
 import { AddBook, RemoveBook } from '../books/book.actions';
 import { AppState } from '../app.state';
@@ -10,12 +10,28 @@ import { AppState } from '../app.state';
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.css']
 })
-export class BookListComponent {
+export class BookListComponent implements OnInit, OnDestroy {
 
   books$: Observable<Book[]>;
-  
+  private booksSubscription: Subscription = new Subscription();
+
+
   constructor(private store: Store<AppState>){
     this.books$ = store.pipe(select('book'));
+  }
+
+  ngOnInit() {
+    // Suscribirse al Observable para obtener los cambios de estado
+    this.booksSubscription = this.books$.subscribe(books => {
+      console.log('Current state of books:', books);
+    });
+  }
+
+  ngOnDestroy() {
+    // Es importante desuscribirse para evitar fugas de memoria
+    if (this.booksSubscription) {
+      this.booksSubscription.unsubscribe();
+    }
   }
 
   addBook(id: string, title:string, author:string){
@@ -27,3 +43,5 @@ export class BookListComponent {
   }
 
 }
+
+

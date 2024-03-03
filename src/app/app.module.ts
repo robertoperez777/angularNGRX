@@ -7,6 +7,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { BookListComponent } from './book-list/book-list.component';
 import { AppComponent } from './app.component';
 import { AppState } from './app.state';
+import { EffectsModule } from '@ngrx/effects';
+import { BookEffects } from './books/book.effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [
@@ -16,7 +19,9 @@ import { AppState } from './app.state';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot<AppState>({book: BookReducer})
+    StoreModule.forRoot<AppState>({book: BookReducer}),
+    EffectsModule.forRoot([BookEffects]),
+    StoreDevtoolsModule.instrument()
   ],
   providers: [],
   bootstrap: [AppComponent]

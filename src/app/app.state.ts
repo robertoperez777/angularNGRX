@@ -1,4 +1,5 @@
-import {Book} from "./models/book"
+import { Book } from "./models/book";
+
 export interface AppState {
-    readonly book:Book[]
+    readonly book: Book[]
 }
